@@ -192,7 +192,7 @@ details.done summary{cursor:pointer;font-weight:700;padding:8px 0}
     <h2 id="h-datos">Tus datos</h2>
     <div class="field">
       <label for="f-name">Nombre</label>
-      <input type="text" id="f-name" autocomplete="name" placeholder="Ej: Ana Gómez">
+      <input type="text" id="f-name" autocomplete="name" autocapitalize="words" placeholder="Ej: Ana Gómez">
     </div>
     <fieldset class="field">
       <legend>¿Cómo lo recibís?</legend>
@@ -203,7 +203,7 @@ details.done summary{cursor:pointer;font-weight:700;padding:8px 0}
     </fieldset>
     <div class="field" id="address-wrap">
       <label for="f-address">Dirección de entrega</label>
-      <input type="text" id="f-address" autocomplete="street-address" placeholder="Calle, número y referencia">
+      <input type="text" id="f-address" autocomplete="street-address" autocapitalize="sentences" placeholder="Calle, número y referencia">
     </div>
     <div class="row2">
       <div class="field"><label for="f-date">Fecha</label><input type="date" id="f-date"></div>
@@ -211,7 +211,7 @@ details.done summary{cursor:pointer;font-weight:700;padding:8px 0}
     </div>
     <div class="field">
       <label for="f-notes">Aclaraciones (opcional)</label>
-      <textarea id="f-notes" rows="2" placeholder="Alergias, sin picante, cambios en el acompañamiento…"></textarea>
+      <textarea id="f-notes" rows="2" autocapitalize="sentences" placeholder="Alergias, sin picante, cambios en el acompañamiento…"></textarea>
     </div>
   </section>
 
@@ -364,6 +364,8 @@ function parseMessage(raw){
 /*END*/
 
 const $=id=>document.getElementById(id);
+const capW=s=>s.replace(/(^|[\s\-(])(\p{L})/gu,(m,a,b)=>a+b.toUpperCase());
+const capS=s=>s.replace(/^\p{L}/u,c=>c.toUpperCase());
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 async function copyText(text,btn){
   const old=btn.textContent;
@@ -403,8 +405,8 @@ function renderDays(){
 }
 const currentItems=()=>MENU.filter(m=>qty[m.day]>0).map(m=>({day:m.day,qty:qty[m.day],dish:m.dish,fish:m.fish}));
 function formData(){
-  return {name:$('f-name').value.trim(),mode:document.querySelector('input[name=mode]:checked').value,
-    address:$('f-address').value.trim(),date:$('f-date').value,time:$('f-time').value,notes:$('f-notes').value.trim(),qty};
+  return {name:capW($('f-name').value.trim()),mode:document.querySelector('input[name=mode]:checked').value,
+    address:capS($('f-address').value.trim()),date:$('f-date').value,time:$('f-time').value,notes:capS($('f-notes').value.trim()),qty};
 }
 function update(){
   const items=currentItems(),t=orderTotal(items),f=formData();
