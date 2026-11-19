@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#D9480F">
+<meta name="description" content="Menú saludable de Sanvitta Fit. Elegí tus marmitas y enviá el pedido por WhatsApp.">
+<meta property="og:title" content="Sanvitta Fit · Pedí tus marmitas">
+<meta property="og:description" content="Menú saludable de la semana. Armá tu pedido y enviálo por WhatsApp.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M5 27C5 14 13 5 27 5c0 14-8 22-20 22Z' fill='%23D9480F'/%3E%3C/svg%3E">
+<title>Sanvitta Fit · Pedí tus marmitas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&family=Yellowtail&display=swap">
+<style>
+img{max-width:100%}[hidden]{display:none!important}
+/* Layout: una sola columna angosta para el cliente (menú → datos → barra de envío fija);
+   panel de dos columnas para Sthefany (pegar + cocinar a la izquierda, pedidos a la derecha). */
+:root{
+  --bg:#FFF8F3; --surface:#FFFFFF; --surface-2:#FFEEE2; --ink:#2B1A11; --muted:#7B6254; --line:#F0DCCD;
+  --accent:#D9480F; --on-accent:#FFFFFF; --accent-soft:#FFE3D2;
+  --leaf:#23703C; --leaf-soft:#DDF3E4;
+  --danger:#B42318; --danger-soft:#FDE4E1;
+  --paper:#FFFFFF; --paper-ink:#1D1814; --paper-muted:#6B5F56; --paper-line:#CFC4BB;
+  --font-display:'Bricolage Grotesque',system-ui,sans-serif;
+  --font-body:'DM Sans',system-ui,sans-serif;
+  --font-script:'Yellowtail','Brush Script MT',cursive;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1A110D; --surface:#271913; --surface-2:#33211A; --ink:#F8EBE2; --muted:#BEA697; --line:#45312A;
+    --accent:#FF8A4C; --on-accent:#2B1206; --accent-soft:#4A2A1A;
+    --leaf:#6CCB8B; --leaf-soft:#1E3A29;
+    --danger:#FF9A90; --danger-soft:#4A1F1B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1A110D; --surface:#271913; --surface-2:#33211A; --ink:#F8EBE2; --muted:#BEA697; --line:#45312A;
+  --accent:#FF8A4C; --on-accent:#2B1206; --accent-soft:#4A2A1A;
+  --leaf:#6CCB8B; --leaf-soft:#1E3A29;
+  --danger:#FF9A90; --danger-soft:#4A1F1B;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.5 var(--font-body);
+  padding-block:8px 32px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+main{max-width:680px;margin:0 auto}
+main.wide{max-width:1040px}
+h1,h2,h3{font-family:var(--font-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(1.9rem,7vw,2.7rem);line-height:1.05;font-weight:800;letter-spacing:-.02em}
+h2{font-size:1.2rem;font-weight:800}
+p{margin:0}
+.muted{color:var(--muted)}
+.eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.vh{position:absolute;opacity:0;width:1px;height:1px;overflow:hidden}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0 18px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand svg{width:34px;height:34px;color:var(--leaf);flex:none}
+.brand b{display:block;font-family:var(--font-display);font-weight:800;font-size:1.2rem;line-height:1.1}
+.brand span{display:block;font-size:.8rem;color:var(--muted)}
+.toplink{font-size:.9rem;font-weight:700;text-decoration:none;white-space:nowrap;padding:8px 2px}
+
+.hero{display:grid;gap:10px;margin-bottom:18px}
+.hero p.lead{color:var(--muted);max-width:52ch}
+
+.prices{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:22px}
+.price{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:2px}
+.price span{font-size:.85rem;color:var(--muted)}
+.price b{font-family:var(--font-display);font-size:1.2rem;font-weight:800;font-variant-numeric:tabular-nums}
+.price small{color:var(--leaf);font-weight:700;font-size:.8rem}
+
+.days{display:grid;gap:10px;margin-bottom:22px}
+.day{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;transition:border-color .15s}
+.day.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.day-main{flex:1 1 15rem;min-width:0;display:grid;gap:6px;justify-items:start}
+.daypill{font-family:var(--font-script);font-size:1.45rem;line-height:1.45;background:var(--accent);color:var(--on-accent);padding:0 16px;border-radius:999px}
+.dish{font-weight:500}
+.unit{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.stepper{display:flex;align-items:center;gap:6px}
+.step{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:1.4rem;line-height:1;cursor:pointer}
+.step:hover{border-color:var(--accent)}
+.stepper output{min-width:2.2ch;text-align:center;font:800 1.3rem var(--font-display);font-variant-numeric:tabular-nums}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;gap:14px}
+.field{display:grid;gap:6px;min-width:0}
+.field label,.field legend{font-size:.85rem;font-weight:700}
+.field legend{padding:0}
+fieldset.field{border:0;margin:0;padding:0}
+input[type=text],input[type=date],input[type=time],textarea{
+  width:100%;min-height:46px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);
+  background:var(--bg);color:var(--ink);font:inherit;
+}
+textarea{resize:vertical;line-height:1.45}
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.segs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg{position:relative;display:block}
+.seg input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.seg span{display:block;text-align:center;padding:11px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-weight:700}
+.seg input:checked+span{background:var(--accent-soft);border-color:var(--accent)}
+.seg input:focus-visible+span{outline:3px solid var(--accent);outline-offset:2px}
+
+.bar{
+  position:sticky;bottom:calc(8px + env(safe-area-inset-bottom,0px));margin-top:20px;
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px 14px;
+  box-shadow:0 8px 28px rgba(43,26,17,.16);display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;
+}
+.bar .sum{flex:1 1 10rem;min-width:0}
+.bar .sum small{display:block;color:var(--muted);font-size:.85rem}
+.bar .sum b{display:block;font:800 1.45rem/1.15 var(--font-display);font-variant-numeric:tabular-nums}
+.bar .go{flex:1 1 14rem;display:grid;gap:4px}
+.hint{font-size:.82rem;color:var(--muted);min-height:1.2em}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border-radius:12px;border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);font:700 1rem var(--font-body);text-decoration:none;cursor:pointer}
+.btn[aria-disabled=true]{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--accent)}
+.btn.sm{min-height:40px;padding:0 14px;font-size:.9rem}
+.btn.danger{background:var(--danger-soft);border-color:var(--danger);color:var(--danger)}
+
+details.preview{margin-top:14px}
+details.preview summary{cursor:pointer;font-weight:700;font-size:.9rem;padding:6px 0}
+pre.msg{white-space:pre-wrap;word-break:break-word;margin:8px 0;padding:12px;border-radius:12px;background:var(--surface-2);font:.88rem/1.5 var(--font-body)}
+.foot{margin-top:26px;font-size:.85rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:space-between}
+
+/* panel */
+.grid2{display:grid;gap:22px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.grid2{grid-template-columns:minmax(0,350px) minmax(0,1fr);align-items:start}}
+.col{display:grid;gap:18px;min-width:0}
+.stats{display:flex;flex-wrap:wrap;gap:10px 28px;padding:6px 0 14px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.stat b{display:block;font:800 1.9rem/1.1 var(--font-display);font-variant-numeric:tabular-nums}
+.stat span{font-size:.82rem;color:var(--muted)}
+.prod{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.prod li{display:flex;gap:12px;align-items:center}
+.prod .n{flex:none;min-width:2.6rem;text-align:center;font:800 1.4rem var(--font-display);background:var(--accent-soft);border-radius:10px;padding:4px 6px;font-variant-numeric:tabular-nums}
+.prod b{display:block;font-size:.95rem}
+.prod span.d{display:block;font-size:.84rem;color:var(--muted)}
+.empty{color:var(--muted);font-size:.92rem;padding:4px 0}
+.orders{display:grid;gap:12px}
+.order{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:grid;gap:10px;min-width:0}
+.order-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.order-top h3{font-size:1.05rem}
+.order-top .tot{font:800 1.15rem var(--font-display);font-variant-numeric:tabular-nums;white-space:nowrap}
+.order .meta{font-size:.88rem;color:var(--muted)}
+.order ul.items{margin:0;padding:0;list-style:none;display:grid;gap:3px;font-size:.93rem}
+.order ul.items b{font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:transparent;color:var(--muted);padding:0 12px;min-height:38px;border-radius:999px;font:700 .85rem var(--font-body);cursor:pointer}
+.chip[aria-pressed=true][data-s=pendiente]{background:var(--surface-2);color:var(--ink);border-color:var(--muted)}
+.chip[aria-pressed=true][data-s=preparando]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.chip[aria-pressed=true][data-s=listo]{background:var(--leaf-soft);color:var(--leaf);border-color:var(--leaf)}
+.chip[aria-pressed=true][data-s=entregado]{background:var(--line);color:var(--ink)}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.warn{background:var(--danger-soft);color:var(--danger);border-radius:10px;padding:8px 10px;font-size:.85rem}
+.slipbox{display:grid;gap:10px;justify-items:start}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+#panel-msg{min-height:1.3em;font-size:.88rem;font-weight:700}
+details.done summary{cursor:pointer;font-weight:700;padding:8px 0}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+
+</head>
+<body>
+<main id="view-order">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 27C5 14 13 5 27 5c0 14-8 22-20 22Z" fill="currentColor" opacity=".18"/><path d="M5 27C5 14 13 5 27 5c0 14-8 22-20 22Zm0 0L19 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><b>Sanvitta Fit</b><span>Sthefany Sandoval · Nutricionista</span></div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <p class="eyebrow">Menú saludable de la semana</p>
+    <h1>Armá tu pedido de marmitas</h1>
+    <p class="lead">Elegí cuántas querés por día y enviá el pedido por WhatsApp. Sthefany te lo confirma por ahí.</p>
+  </section>
+
+  <section class="prices" id="prices" aria-label="Precios"></section>
+
+  <section class="days" id="days" aria-label="Menú por día"></section>
+
+  <section class="card" aria-labelledby="h-datos">
+    <h2 id="h-datos">Tus datos</h2>
+    <div class="field">
+      <label for="f-name">Nombre</label>
+      <input type="text" id="f-name" autocomplete="name" placeholder="Ej: Ana Gómez">
+    </div>
+    <fieldset class="field">
+      <legend>¿Cómo lo recibís?</legend>
+      <div class="segs">
+        <label class="seg"><input type="radio" name="mode" id="mode-entrega" value="entrega" checked><span>Entrega</span></label>
+        <label class="seg"><input type="radio" name="mode" id="mode-retiro" value="retiro"><span>Retiro</span></label>
+      </div>
+    </fieldset>
+    <div class="field" id="address-wrap">
+      <label for="f-address">Dirección de entrega</label>
+      <input type="text" id="f-address" autocomplete="street-address" placeholder="Calle, número y referencia">
+    </div>
+    <div class="row2">
+      <div class="field"><label for="f-date">Fecha</label><input type="date" id="f-date"></div>
+      <div class="field"><label for="f-time">Hora (opcional)</label><input type="time" id="f-time"></div>
+    </div>
+    <div class="field">
+      <label for="f-notes">Aclaraciones (opcional)</label>
+      <textarea id="f-notes" rows="2" placeholder="Alergias, sin picante, cambios en el acompañamiento…"></textarea>
+    </div>
+  </section>
+
+  <details class="preview">
+    <summary>Ver el mensaje que se enviará</summary>
+    <pre class="msg" id="msg-preview">Completá los datos para ver el mensaje.</pre>
+    <button type="button" class="btn ghost sm" id="copy-msg">Copiar mensaje</button>
+  </details>
+
+  <div class="bar" role="region" aria-label="Resumen del pedido">
+    <div class="sum"><small id="sum-units">0 marmitas</small><b id="sum-total">0 Gs</b><small id="sum-saving"></small></div>
+    <div class="go">
+      <a id="send" class="btn" target="_blank" rel="noopener" aria-disabled="true">Enviar pedido por WhatsApp</a>
+      <p class="hint" id="hint" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <span>Pedidos por WhatsApp · Instagram @sanvittpy</span>
+    <a href="#panel">Panel de Sthefany</a>
+  </footer>
+</main>
+
+<main id="view-panel" class="wide" hidden>
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M5 27C5 14 13 5 27 5c0 14-8 22-20 22Z" fill="currentColor" opacity=".18"/><path d="M5 27C5 14 13 5 27 5c0 14-8 22-20 22Zm0 0L19 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><b>Panel de pedidos</b><span>Sanvitta Fit · guardado solo en este dispositivo</span></div>
+    </div>
+    <a class="toplink" href="#pedir">← Menú de clientes</a>
+  </header>
+
+  <div class="stats" aria-label="Resumen">
+    <div class="stat"><b id="st-orders">0</b><span>pedidos activos</span></div>
+    <div class="stat"><b id="st-units">0</b><span>marmitas por cocinar</span></div>
+    <div class="stat"><b id="st-total">0 Gs</b><span>en pedidos activos</span></div>
+  </div>
+
+  <div class="grid2">
+    <div class="col">
+      <section class="card" aria-labelledby="h-new">
+        <h2 id="h-new">Nuevo pedido</h2>
+        <div class="field">
+          <label for="paste">Pegá el mensaje que llegó por WhatsApp</label>
+          <textarea id="paste" rows="9" placeholder="*Pedido · Sanvitta Fit*&#10;Cliente: …&#10;• 2 × Lunes: …"></textarea>
+        </div>
+        <div class="tools">
+          <button type="button" class="btn" id="add">Agregar pedido</button>
+          <button type="button" class="btn ghost" id="sample">Probar con un ejemplo</button>
+        </div>
+        <p id="paste-msg" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="card" aria-labelledby="h-prod">
+        <h2 id="h-prod">Para cocinar</h2>
+        <ul class="prod" id="prod"></ul>
+      </section>
+    </div>
+
+    <div class="col">
+      <section aria-labelledby="h-orders" style="display:grid;gap:12px">
+        <div class="tools" style="justify-content:space-between;align-items:center">
+          <h2 id="h-orders">Pedidos</h2>
+          <button type="button" class="btn ghost sm" id="dl-all">Descargar comandas para imprimir</button>
+        </div>
+        <p id="panel-msg" role="status" aria-live="polite"></p>
+        <div class="orders" id="orders"></div>
+        <details class="done" id="done-wrap" hidden>
+          <summary id="done-sum">Entregados</summary>
+          <div class="orders" id="done"></div>
+        </details>
+      </section>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+'use strict';
+/*LOGIC*/
+const WA_NUMBER='5597991452556';
+const MENU=[
+  {day:'Lunes',dish:'Pollo salteado con vegetales + arroz blanco + ensalada verde',fish:false},
+  {day:'Martes',dish:'Estofado de carne + fideo integral + ensalada verde',fish:false},
+  {day:'Miércoles',dish:'Tilapia grillada + arroz con cúrcuma + feijao + ensalada verde',fish:true},
+  {day:'Jueves',dish:'Carne vacuna en salsa + puré de papa + ensalada verde',fish:false},
+  {day:'Viernes',dish:'Lasaña integral de pollo + ensalada verde',fish:false}
+];
+const PRICE={single:27000,fish:32000,packs:[{qty:20,price:520000},{qty:5,price:136000}]};
+const fmt=n=>String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+const menuIdx=day=>MENU.findIndex(m=>norm(m.day)===norm(day));
+
+function priceStandard(n){
+  const best=[0],pick=[null];
+  for(let i=1;i<=n;i++){
+    best[i]=best[i-1]+PRICE.single;pick[i]={qty:1,price:PRICE.single};
+    for(const p of PRICE.packs){
+      if(i>=p.qty&&best[i-p.qty]+p.price<best[i]){best[i]=best[i-p.qty]+p.price;pick[i]=p;}
+    }
+  }
+  return {cost:best[n]||0,saving:n*PRICE.single-(best[n]||0)};
+}
+function orderTotal(items){
+  let std=0,fish=0;
+  for(const it of items){if(it.fish)fish+=it.qty;else std+=it.qty;}
+  const s=priceStandard(std);
+  return {units:std+fish,total:s.cost+fish*PRICE.fish,saving:s.saving};
+}
+const WD=['dom','lun','mar','mié','jue','vie','sáb'];
+function whenText(date,time){
+  if(!date)return '';
+  const [y,m,d]=date.split('-').map(Number);
+  const dt=new Date(y,m-1,d);
+  return WD[dt.getDay()]+' '+String(d).padStart(2,'0')+'/'+String(m).padStart(2,'0')+(time?' '+time:'');
+}
+function buildMessage(f){
+  const items=MENU.filter(m=>(f.qty[m.day]||0)>0).map(m=>({day:m.day,qty:f.qty[m.day],dish:m.dish,fish:m.fish}));
+  const t=orderTotal(items);
+  const L=['*Pedido · Sanvitta Fit*','Cliente: '+f.name,'Modalidad: '+(f.mode==='entrega'?'Entrega':'Retiro')];
+  if(f.mode==='entrega'&&f.address)L.push('Dirección: '+f.address);
+  const w=whenText(f.date,f.time);
+  if(w)L.push('Para: '+w);
+  L.push('');
+  items.forEach(i=>L.push('• '+i.qty+' × '+i.day+': '+i.dish));
+  L.push('');
+  L.push('Total: '+fmt(t.total)+' Gs');
+  if(f.notes)L.push('Notas: '+f.notes);
+  return L.join('\n');
+}
+function parseMessage(raw){
+  const lines=String(raw).split(/\r?\n/).map(l=>l.replace(/[*_]/g,'').trim()).filter(Boolean);
+  const o={name:'',mode:'',address:'',when:'',notes:'',items:[],totalMsg:null};
+  for(const l of lines){
+    let m;
+    if((m=l.match(/^(?:cliente|nombre)\s*:\s*(.+)$/i)))o.name=m[1];
+    else if((m=l.match(/^modalidad\s*:\s*(.+)$/i)))o.mode=m[1];
+    else if((m=l.match(/^direcci[oó]n\s*:\s*(.+)$/i)))o.address=m[1];
+    else if((m=l.match(/^(?:para|fecha)\s*:\s*(.+)$/i)))o.when=m[1];
+    else if((m=l.match(/^notas?\s*:\s*(.+)$/i)))o.notes=m[1];
+    else if((m=l.match(/^total\s*:\s*([\d.,\s]+)/i)))o.totalMsg=parseInt(m[1].replace(/\D/g,''),10)||null;
+    else if((m=l.match(/^[•\-]\s*(\d+)\s*[x×]\s*([^:]+?)\s*:\s*(.+)$/i))){
+      const i=menuIdx(m[2]);
+      o.items.push({day:i>=0?MENU[i].day:m[2].trim(),qty:parseInt(m[1],10),dish:m[3].trim(),fish:i>=0?MENU[i].fish:/tilapia/i.test(m[3])});
+    }
+  }
+  return o.items.length?o:null;
+}
+/*END*/
+
+const $=id=>document.getElementById(id);
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+async function copyText(text,btn){
+  const old=btn.textContent;
+  try{await navigator.clipboard.writeText(text);btn.textContent='Copiado';}
+  catch(e){
+    try{
+      const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+      document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');ta.remove();
+      btn.textContent=ok?'Copiado':'Seleccioná y copiá';
+    }catch(e2){btn.textContent='Seleccioná y copiá';}
+  }
+  setTimeout(()=>{btn.textContent=old},1800);
+}
+
+/* ---------- vista del cliente ---------- */
+const qty={};MENU.forEach(m=>{qty[m.day]=0});
+const MAXQ=40;
+function renderPrices(){
+  const c=['<div class="price"><span>1 marmita</span><b>'+fmt(PRICE.single)+' Gs</b></div>'];
+  PRICE.packs.filter(p=>p.price<p.qty*PRICE.single).forEach(p=>{
+    c.push('<div class="price"><span>Pack de '+p.qty+'</span><b>'+fmt(p.price)+' Gs</b><small>ahorrás '+fmt(p.qty*PRICE.single-p.price)+' Gs</small></div>');
+  });
+  if(MENU.some(m=>m.fish))c.push('<div class="price"><span>Con tilapia</span><b>'+fmt(PRICE.fish)+' Gs</b><small>cada una, fuera de pack</small></div>');
+  $('prices').innerHTML=c.join('');
+}
+function renderDays(){
+  $('days').innerHTML=MENU.map((m,i)=>
+    '<article class="day" id="day-'+i+'">'+
+      '<div class="day-main"><span class="daypill">'+esc(m.day)+'</span><p class="dish">'+esc(m.dish)+'</p>'+
+      '<p class="unit">'+fmt(m.fish?PRICE.fish:PRICE.single)+' Gs cada una</p></div>'+
+      '<div class="stepper" role="group" aria-label="Cantidad para '+esc(m.day)+'">'+
+        '<button type="button" class="step" data-i="'+i+'" data-d="-1" aria-label="Una menos para '+esc(m.day)+'">−</button>'+
+        '<output id="q-'+i+'" aria-live="polite">0</output>'+
+        '<button type="button" class="step" data-i="'+i+'" data-d="1" aria-label="Una más para '+esc(m.day)+'">+</button>'+
+      '</div></article>'
+  ).join('');
+}
+const currentItems=()=>MENU.filter(m=>qty[m.day]>0).map(m=>({day:m.day,qty:qty[m.day],dish:m.dish,fish:m.fish}));
+function formData(){
+  return {name:$('f-name').value.trim(),mode:document.querySelector('input[name=mode]:checked').value,
+    address:$('f-address').value.trim(),date:$('f-date').value,time:$('f-time').value,notes:$('f-notes').value.trim(),qty};
+}
+function update(){
+  const items=currentItems(),t=orderTotal(items),f=formData();
+  MENU.forEach((m,i)=>{$('q-'+i).textContent=qty[m.day];$('day-'+i).classList.toggle('on',qty[m.day]>0);});
+  $('sum-units').textContent=t.units+(t.units===1?' marmita':' marmitas');
+  $('sum-total').textContent=fmt(t.total)+' Gs';
+  $('sum-saving').textContent=t.saving>0?'Con pack: ahorrás '+fmt(t.saving)+' Gs':'';
+  $('address-wrap').hidden=f.mode!=='entrega';
+  const miss=[];
+  if(!t.units)miss.push('elegir al menos una marmita');
+  if(!f.name)miss.push('tu nombre');
+  if(f.mode==='entrega'&&!f.address)miss.push('la dirección');
+  if(!f.date)miss.push('la fecha');
+  const send=$('send');
+  if(miss.length){
+    send.removeAttribute('href');send.setAttribute('aria-disabled','true');
+    $('hint').textContent='Falta '+miss.join(', ');
+    $('msg-preview').textContent='Completá los datos para ver el mensaje.';
+  }else{
+    const msg=buildMessage(f);
+    send.href='https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg);
+    send.removeAttribute('aria-disabled');
+    $('hint').textContent='Se abre WhatsApp con el pedido listo para enviar.';
+    $('msg-preview').textContent=msg;
+  }
+}
+function pad(n){return String(n).padStart(2,'0')}
+function iso(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+
+/* ---------- panel ---------- */
+const KEY='sanvitta.orders.v1';
+const STATUS=[['pendiente','Pendiente'],['preparando','Preparando'],['listo','Listo'],['entregado','Entregado']];
+let orders=[];
+try{const v=JSON.parse(store.get(KEY)||'[]');if(Array.isArray(v))orders=v;}catch(e){}
+const saveOrders=()=>store.set(KEY,JSON.stringify(orders));
+const openSlips=new Set();
+let pendingDel=null;
+
+const SLIP_CSS=
+'.slip{background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:6px;padding:16px 18px;width:100%;max-width:420px;font:14px/1.45 system-ui,sans-serif;break-inside:avoid;margin:0 0 14px}'+
+'.slip header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:2px solid var(--paper-ink);padding-bottom:8px;margin-bottom:10px}'+
+'.slip header strong{font-size:18px}.slip header span{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper-muted)}'+
+'.slip .no{font-weight:700;font-size:16px}'+
+'.slip dl{margin:0 0 10px;display:grid;grid-template-columns:auto 1fr;gap:2px 10px}.slip dt{color:var(--paper-muted)}.slip dd{margin:0;font-weight:600}'+
+'.slip table{width:100%;border-collapse:collapse;margin:6px 0}.slip td{padding:5px 0;border-top:1px solid var(--paper-line);vertical-align:top}'+
+'.slip td.q{width:2.4em;font-weight:700}'+
+'.slip .tot{display:flex;justify-content:space-between;font-weight:800;font-size:16px;border-top:2px solid var(--paper-ink);padding-top:8px;margin-top:6px}'+
+'.slip .notes{margin:8px 0 0;padding:6px 8px;border:1px dashed var(--paper-line)}'+
+'.slip .checks{display:flex;gap:18px;margin-top:10px;font-size:13px}';
+const styleEl=document.createElement('style');styleEl.textContent=SLIP_CSS;document.head.appendChild(styleEl);
+
+function slipHTML(o){
+  const rows=o.items.map(i=>'<tr><td class="q">'+i.qty+'×</td><td><b>'+esc(i.day)+'</b> · '+esc(i.dish)+'</td></tr>').join('');
+  return '<article class="slip"><header><div><strong>Sanvitta Fit</strong><span>Comanda</span></div><div class="no">Pedido #'+o.n+'</div></header>'+
+    '<dl><dt>Cliente</dt><dd>'+esc(o.name||'Sin nombre')+'</dd>'+
+    '<dt>'+esc(o.mode||'Entrega')+'</dt><dd>'+esc(o.when||'Sin fecha')+'</dd>'+
+    (o.address?'<dt>Dirección</dt><dd>'+esc(o.address)+'</dd>':'')+'</dl>'+
+    '<table>'+rows+'</table>'+
+    '<div class="tot"><span>Total</span><span>'+fmt(o.total)+' Gs</span></div>'+
+    (o.notes?'<p class="notes"><b>Notas:</b> '+esc(o.notes)+'</p>':'')+
+    '<div class="checks"><span>☐ Empacado</span><span>☐ Cobrado</span></div></article>';
+}
+function plainSlip(o){
+  return ['COMANDA · Pedido #'+o.n+' · Sanvitta Fit','Cliente: '+(o.name||'Sin nombre'),(o.mode||'Entrega')+(o.when?' · '+o.when:''),
+    o.address?'Dirección: '+o.address:''].concat(o.items.map(i=>i.qty+'× '+i.day+': '+i.dish),['Total: '+fmt(o.total)+' Gs'],o.notes?['Notas: '+o.notes]:[]).filter(Boolean).join('\n');
+}
+function docHTML(list){
+  const css=':root{--paper:#fff;--paper-ink:#1d1814;--paper-muted:#6b5f56;--paper-line:#cfc4bb}body{font-family:system-ui,sans-serif;background:#eee;margin:0;padding:16px}'+
+    '.bar{display:flex;gap:12px;align-items:center;margin-bottom:16px}.bar button{font:600 15px system-ui;padding:10px 16px;border-radius:8px;border:1px solid #333;background:#fff;cursor:pointer}'+
+    SLIP_CSS+'@media print{.noprint{display:none}body{background:#fff;padding:0}.slip{margin-bottom:10mm}}';
+  return '<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Comandas Sanvitta Fit</title><style>'+css+'</style></head><body>'+
+    '<div class="bar noprint"><button onclick="window.print()">Imprimir comandas</button><span>'+list.length+' comanda'+(list.length===1?'':'s')+'</span></div>'+
+    list.map(slipHTML).join('')+'</body></html>';
+}
+function flash(msg,bad){const el=$('panel-msg');el.textContent=msg;el.style.color=bad?'var(--danger)':'var(--leaf)';}
+async function saveFile(filename,html){
+  let dl=null;
+  try{dl=await window.claude?.use?.('downloads');}catch(e){}
+  if(!dl){try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download=filename;document.body.appendChild(a);a.click();a.remove();flash('Archivo descargado. Abrilo y tocá «Imprimir comandas».');}catch(e){flash('No se pudo descargar el archivo.',true);}return;}
+  try{await dl.save({filename,data:html});flash('Archivo listo. Abrilo en el navegador y tocá «Imprimir comandas».');}
+  catch(e){if(e&&e.code==='declined')return;flash('No se pudo descargar ('+((e&&e.code)||'error')+').',true);}
+}
+
+function orderCard(o){
+  const chips=STATUS.map(s=>'<button type="button" class="chip" data-act="status" data-id="'+o.id+'" data-s="'+s[0]+'" aria-pressed="'+(o.status===s[0])+'">'+s[1]+'</button>').join('');
+  const items=o.items.map(i=>'<li><b>'+i.qty+'×</b> '+esc(i.day)+' · '+esc(i.dish)+'</li>').join('');
+  const mism=o.totalMsg!=null&&o.totalMsg!==o.total?'<p class="warn">El total del mensaje ('+fmt(o.totalMsg)+' Gs) no coincide con el cálculo ('+fmt(o.total)+' Gs). Revisalo antes de cobrar.</p>':'';
+  const delBtn=pendingDel===o.id
+    ?'<button type="button" class="btn danger sm" data-act="del-yes" data-id="'+o.id+'">Sí, eliminar</button><button type="button" class="btn ghost sm" data-act="del-no">Cancelar</button>'
+    :'<button type="button" class="btn ghost sm" data-act="del" data-id="'+o.id+'">Eliminar</button>';
+  const slip=openSlips.has(o.id)
+    ?'<div class="slipbox">'+slipHTML(o)+'<div class="tools"><button type="button" class="btn sm" data-act="dl-one" data-id="'+o.id+'">Descargar para imprimir</button><button type="button" class="btn ghost sm" data-act="copy-one" data-id="'+o.id+'">Copiar texto</button></div></div>':'';
+  return '<article class="order"><div class="order-top"><div><h3>'+esc(o.name||'Sin nombre')+' <span class="muted" style="font-weight:600">#'+o.n+'</span></h3>'+
+    '<p class="meta">'+esc(o.mode||'Entrega')+(o.when?' · '+esc(o.when):'')+(o.address?' · '+esc(o.address):'')+'</p></div><span class="tot">'+fmt(o.total)+' Gs</span></div>'+
+    '<ul class="items">'+items+'</ul>'+(o.notes?'<p class="meta"><b>Notas:</b> '+esc(o.notes)+'</p>':'')+mism+
+    '<div class="chips" role="group" aria-label="Estado del pedido">'+chips+'</div>'+
+    '<div class="acts"><button type="button" class="btn ghost sm" data-act="slip" data-id="'+o.id+'" aria-expanded="'+openSlips.has(o.id)+'">'+(openSlips.has(o.id)?'Ocultar comanda':'Ver comanda')+'</button>'+delBtn+'</div>'+slip+'</article>';
+}
+function renderPanel(){
+  const active=orders.filter(o=>o.status!=='entregado'),done=orders.filter(o=>o.status==='entregado');
+  $('st-orders').textContent=active.length;
+  $('st-units').textContent=active.reduce((a,o)=>a+o.units,0);
+  $('st-total').textContent=fmt(active.reduce((a,o)=>a+o.total,0))+' Gs';
+  const prod=new Map();
+  active.forEach(o=>o.items.forEach(i=>{const r=prod.get(i.day)||{day:i.day,dish:i.dish,qty:0};r.qty+=i.qty;prod.set(i.day,r);}));
+  const list=[...prod.values()].sort((a,b)=>(menuIdx(a.day)<0?99:menuIdx(a.day))-(menuIdx(b.day)<0?99:menuIdx(b.day)));
+  $('prod').innerHTML=list.length
+    ?list.map(r=>'<li><span class="n">'+r.qty+'</span><div><b>'+esc(r.day)+'</b><span class="d">'+esc(r.dish)+'</span></div></li>').join('')
+    :'<li class="empty">Cuando agregues pedidos, acá ves cuántas marmitas cocinar por día.</li>';
+  $('orders').innerHTML=active.length?active.map(orderCard).join(''):'<p class="empty">Todavía no hay pedidos activos. Pegá el mensaje de WhatsApp en «Nuevo pedido».</p>';
+  $('done-wrap').hidden=!done.length;
+  $('done-sum').textContent='Entregados ('+done.length+')';
+  $('done').innerHTML=done.map(orderCard).join('');
+  $('dl-all').disabled=!active.length;
+  $('dl-all').style.opacity=active.length?'1':'.5';
+}
+function addOrder(raw){
+  const p=parseMessage(raw);
+  if(!p)return false;
+  const t=orderTotal(p.items);
+  const n=orders.reduce((a,o)=>Math.max(a,o.n),0)+1;
+  orders.push({id:'o'+Date.now()+'-'+n,n:n,name:p.name,mode:p.mode,address:p.address,when:p.when,notes:p.notes,items:p.items,
+    units:t.units,total:t.total,totalMsg:p.totalMsg,status:'pendiente'});
+  saveOrders();
+  return true;
+}
+function sampleMessage(){
+  const d=new Date();d.setDate(d.getDate()+((8-d.getDay())%7||7));
+  return buildMessage({name:'Ana Gómez (ejemplo)',mode:'entrega',address:'Av. Mariscal López 1234, frente a la plaza',date:iso(d),time:'12:30',notes:'Sin picante, por favor',
+    qty:{Lunes:2,Martes:0,'Miércoles':1,Jueves:0,Viernes:2}});
+}
+
+/* ---------- eventos ---------- */
+renderPrices();renderDays();
+$('f-date').min=iso(new Date());
+$('days').addEventListener('click',e=>{
+  const b=e.target.closest('.step');if(!b)return;
+  const m=MENU[+b.dataset.i];
+  qty[m.day]=Math.max(0,Math.min(MAXQ,qty[m.day]+(+b.dataset.d)));
+  update();
+});
+['f-name','f-address','f-date','f-time','f-notes'].forEach(id=>$(id).addEventListener('input',update));
+document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener('change',update));
+$('send').addEventListener('click',e=>{if($('send').getAttribute('aria-disabled')==='true')e.preventDefault();});
+$('copy-msg').addEventListener('click',e=>copyText($('msg-preview').textContent,e.currentTarget));
+
+$('add').addEventListener('click',()=>{
+  const raw=$('paste').value.trim();
+  const el=$('paste-msg');
+  if(!raw){el.textContent='Pegá primero el mensaje del cliente.';el.style.color='var(--danger)';return;}
+  if(addOrder(raw)){$('paste').value='';el.textContent='Pedido agregado.';el.style.color='var(--leaf)';renderPanel();}
+  else{el.textContent='No encontré platos en el mensaje. Tiene que tener líneas como «• 2 × Lunes: …».';el.style.color='var(--danger)';}
+});
+$('sample').addEventListener('click',()=>{
+  $('paste').value=sampleMessage();
+  const el=$('paste-msg');el.textContent='Ejemplo cargado. Tocá «Agregar pedido».';el.style.color='var(--muted)';
+});
+$('dl-all').addEventListener('click',()=>{
+  const active=orders.filter(o=>o.status!=='entregado');
+  if(active.length)saveFile('comandas-sanvitta.html',docHTML(active));
+});
+function onOrderClick(e){
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const id=b.dataset.id,o=orders.find(x=>x.id===id),act=b.dataset.act;
+  if(act==='status'&&o){o.status=b.dataset.s;saveOrders();}
+  else if(act==='slip'){openSlips.has(id)?openSlips.delete(id):openSlips.add(id);}
+  else if(act==='del'){pendingDel=id;}
+  else if(act==='del-no'){pendingDel=null;}
+  else if(act==='del-yes'){orders=orders.filter(x=>x.id!==id);openSlips.delete(id);pendingDel=null;saveOrders();}
+  else if(act==='dl-one'&&o){saveFile('comanda-'+o.n+'.html',docHTML([o]));return;}
+  else if(act==='copy-one'&&o){copyText(plainSlip(o),b);return;}
+  renderPanel();
+}
+$('orders').addEventListener('click',onOrderClick);
+$('done').addEventListener('click',onOrderClick);
+
+function route(){
+  const p=location.hash==='#panel';
+  $('view-panel').hidden=!p;$('view-order').hidden=p;
+  if(p)renderPanel();
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+update();route();
+})();
+</script>
+</body>
+</html>
